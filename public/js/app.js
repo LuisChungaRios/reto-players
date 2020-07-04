@@ -2110,9 +2110,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
-//
-//
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2135,7 +2132,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       messageResponse: '',
       typeAlert: '',
       showAlert: false,
-      alertSuccess: 'alert-success'
+      alertSuccess: 'alert-success',
+      alertDanger: 'alert-danger'
     };
   },
   computed: {
@@ -2154,8 +2152,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     deletePlayer: function deletePlayer(id) {
       var _this2 = this;
 
-      axios["delete"]("/players/".concat(id)).then(function (res) {
-        return _this2.getPlayers();
+      axios["delete"]("/players/".concat(id)).then(function (response) {
+        _this2.getPlayers();
+
+        _this2.prepareShowAlert(response.data.message, _this2.alertSuccess);
+      })["catch"](function (error) {
+        _this2.prepareShowAlert("No se pudo eliminar el jugador, error: ".concat(error.response.data.message), _this2.alertDanger);
       });
     },
     setDataPlayerForUpdateForm: function setDataPlayerForUpdateForm(player) {
@@ -2177,12 +2179,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         _this3.getPlayers();
 
-        console.log(response);
-        _this3.messageResponse = response.data.message;
-        _this3.typeAlert = _this3.alertSuccess;
-        _this3.showAlert = true;
-
-        _this3.setTimeoutShowAlert();
+        _this3.prepareShowAlert(response.data.message, _this3.alertSuccess);
       })["catch"](function (error) {
         _this3.errors = error.response.data.errors;
       });
@@ -2194,9 +2191,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this4.clear();
 
         _this4.getPlayers();
+
+        _this4.prepareShowAlert(response.data.message, _this4.alertSuccess);
       })["catch"](function (error) {
         _this4.errors = error.response.data.errors;
       });
+    },
+    prepareShowAlert: function prepareShowAlert(message, typeAlert) {
+      this.messageResponse = message;
+      this.typeAlert = typeAlert;
+      this.showAlert = true;
+      this.setTimeoutShowAlert();
     },
     setTimeoutShowAlert: function setTimeoutShowAlert() {
       var _this5 = this;

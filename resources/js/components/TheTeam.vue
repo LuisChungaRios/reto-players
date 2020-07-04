@@ -2,9 +2,7 @@
     <div class="col-12 p-3">
         <div class="row">
             <div class="col-sm-4 offset-sm-4 text-center">
-
                     <PlayerAlert :message="messageResponse" :type-alert="typeAlert" :show-alert="showAlert"> </PlayerAlert>
-
             </div>
             <div class="col-8">
                 <table class="table">
@@ -100,7 +98,6 @@
                             </div>
                         </form>
                     </div>
-                </div>
             </div>
         </div>
     </div>
@@ -129,7 +126,8 @@
             messageResponse : '',
             typeAlert: '',
             showAlert: false,
-            alertSuccess : 'alert-success'
+            alertSuccess : 'alert-success',
+            alertDanger : 'alert-danger'
 
         }
     },
@@ -145,7 +143,12 @@
             })
         },
         deletePlayer(id) {
-            axios.delete(`/players/${id}`).then(res => this.getPlayers())
+            axios.delete(`/players/${id}`).then(response => {
+                this.getPlayers()
+                this.prepareShowAlert(response.data.message, this.alertSuccess)
+            }).catch(error => {
+                this.prepareShowAlert(`No se pudo eliminar el jugador, error: ${error.response.data.message}`, this.alertDanger)
+            })
         },
         setDataPlayerForUpdateForm(player) {
           this.form = {
@@ -164,13 +167,8 @@
              return axios.post('/players', {...this.form}).then( response => {
                     this.clear()
                     this.getPlayers()
-                    console.log(response)
-                    this.messageResponse =response.data.message
-                    this.typeAlert = this.alertSuccess
-                    this.showAlert = true
-                    this.setTimeoutShowAlert()
+                    this.prepareShowAlert(response.data.message, this.alertSuccess)
                 }).catch(error => {
-
                     this.errors = error.response.data.errors
                 })
         },
@@ -178,9 +176,16 @@
           return axios.put(`/players/${this.form.id}`, {...this.form}).then(response => {
               this.clear()
               this.getPlayers()
+              this.prepareShowAlert(response.data.message, this.alertSuccess)
           }).catch(error =>  {
               this.errors = error.response.data.errors
           })
+        },
+        prepareShowAlert(message, typeAlert) {
+            this.messageResponse = message
+            this.typeAlert = typeAlert
+            this.showAlert = true
+            this.setTimeoutShowAlert()
         },
         setTimeoutShowAlert() {
             setTimeout(() => {
