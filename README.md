@@ -13,3 +13,7 @@ Se ha generado una relación de many to many ficticio (Player, Team, PlayerTeam 
 El metodo se encuentra en PlayerController@getAllTeamsPlayer
 
 ***url => /players/teams/all***
+
+***Es necesario ejecutar las migraciones y los seeders*** 
+
+` php artisan migrate --seed`

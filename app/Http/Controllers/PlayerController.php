@@ -65,7 +65,8 @@ class PlayerController extends Controller
         if ($operation === 'increments') {
             $player->goals += 1;
         } else {
-            $player->goals -= 1;
+            if ($player->goals > 0) $player->goals -= 1;
+
         }
         $player->save();
 
