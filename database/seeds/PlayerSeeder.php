@@ -11,6 +11,9 @@ class PlayerSeeder extends Seeder
      */
     public function run()
     {
+
+
+
         DB::table('players')->insert([
            'name' => 'Pedro Gallese',
            'position' => 'Arquero',
@@ -35,17 +38,7 @@ class PlayerSeeder extends Seeder
            'goals' => 1
         ]);
 
-         DB::table('players')->insert([
-           'name' => 'Paolo Guerrero',
-           'position' => 'Delantero Centro',
-           'goals' => 39
-        ]);
 
-         DB::table('players')->insert([
-           'name' => 'Edison Flores',
-           'position' => 'Extremo Izquierdo',
-           'goals' => 13
-        ]);
 
          DB::table('players')->insert([
            'name' => 'Yoshimar Yotún',

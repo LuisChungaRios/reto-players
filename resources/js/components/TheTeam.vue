@@ -5,31 +5,49 @@
                     <PlayerAlert :message="messageResponse" :type-alert="typeAlert" :show-alert="showAlert"> </PlayerAlert>
             </div>
             <div class="col-8">
-                <table class="table">
-                    <thead>
-                    <tr class="text-center">
+               <div class="row">
+                   <div class="col-12 my-3">
+                       <form class="form-inline my-2 my-lg-0 d-flex justify-content-center" @submit.prevent="getPlayers($refs.filter.value, $refs.search.value)">
+                           <label for="filter"> Buscar por  : </label>
+                           <select name="filter" ref="filter" id="filter" class="form-control mx-2">
+                               <option value="name"> Jugador </option>
+                               <option value="position">Posición</option>
+                           </select>
+                           <input class="form-control mr-sm-2" ref="search" type="search"  name="search" id="search" placeholder="nombre ..." aria-label="Search">
+                           <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Buscar</button>
+                       </form>
+                   </div>
+                   <div class="col-12 text-center my-3">
+                       <h3> {{ totalPlayers }}  jugadores </h3>
+                   </div>
+                   <div class="col-12">
+                       <table class="table">
+                           <thead>
+                           <tr class="text-center">
 
-                        <th scope="col">Jugador</th>
-                        <th scope="col">Posición</th>
-                        <th scope="col">Goles</th>
-                        <th scope="col">Opciones</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="player in players" :key="player.id" class="text-center">
+                               <th scope="col">Jugador</th>
+                               <th scope="col">Posición</th>
+                               <th scope="col">Goles</th>
+                               <th scope="col">Opciones</th>
+                           </tr>
+                           </thead>
+                           <tbody>
+                           <tr v-for="player in players" :key="player.id" class="text-center">
 
-                        <td> {{ player.name }} </td>
-                        <td> {{ player.position }} </td>
-                        <td> {{ player.goals }} </td>
-                        <td  class="d-flex flex-wrap justify-content-center">
-                            <PlayerGoals @reload_players="getPlayers"  :player="player"></PlayerGoals>
-                            <button class="btn btn-primary mx-3" @click="setDataPlayerForUpdateForm(player)" > Editar</button>
-                            <button class="btn btn-secondary mx-3" @click="deletePlayer(player.id)"> Eliminar </button>
-                        </td>
-                    </tr>
+                               <td> {{ player.name }} </td>
+                               <td> {{ player.position }} </td>
+                               <td> {{ player.goals }} </td>
+                               <td  class="d-flex flex-wrap justify-content-center">
+                                   <PlayerGoals @reload_players="getPlayers"  :player="player"></PlayerGoals>
+                                   <button class="btn btn-primary mx-3" @click="setDataPlayerForUpdateForm(player)" > Editar</button>
+                                   <button class="btn btn-secondary mx-3" @click="deletePlayer(player.id)"> Eliminar </button>
+                               </td>
+                           </tr>
 
-                    </tbody>
-                </table>
+                           </tbody>
+                       </table>
+                   </div>
+               </div>
             </div>
             <div class="col-4 d-flex align-items-center">
                     <div class="col-12">
@@ -137,8 +155,12 @@
         }
     },
     methods: {
-        getPlayers() {
-            axios.get('/players').then( res => {
+        getPlayers(filter = null, search = null) {
+            let uri = "/players";
+            if(filter != null && search != null) {
+                uri = `${uri}?filter=${filter}&search=${search}`
+            }
+            axios.get(uri).then( res => {
                 this.players = res.data.data
             })
         },

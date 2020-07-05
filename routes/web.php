@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('players','PlayerController');
 Route::put('players/{player}/goals/{operation}','PlayerController@changeGoalsValue')->name('players.goals.change_value');
+Route::get('players/teams/all','PlayerController@getAllTeamsPlayer');
 Route::get('/', function () {
     return view('welcome');
 });

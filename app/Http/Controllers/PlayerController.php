@@ -12,9 +12,15 @@ class PlayerController extends Controller
 
     public function index()
     {
+        $search = request()->query('search',null);
+        $filter = request()->query('filter',null);
+        $players = Player::orderby('id','desc')->get();
+        if (!is_null($filter))  {
+            $players = Player::where($filter, 'LIKE', "%{$search}%")->orderby('id','desc')->get();
+        }
         return response()->json([
             'success' => 'ok',
-            'data' => Player::orderby('id','desc')->get()
+            'data' => $players
         ]);
     }
 
@@ -27,7 +33,7 @@ class PlayerController extends Controller
         $player->save();
 
         return response()->json([
-            'message' => 'Created player',
+            'message' => 'Jugador creado correctamente',
             'success' => 'ok'
         ]);
     }
@@ -42,7 +48,7 @@ class PlayerController extends Controller
 
         return response()->json([
             'success' => 'ok',
-            'message' => 'Player updated'
+            'message' => 'Jugador actualizado correctamente'
         ]);
     }
 
@@ -75,8 +81,13 @@ class PlayerController extends Controller
         $player->delete();
         return response()->json([
             'success' => 'ok',
-            'message' => 'Player deleted'
+            'message' => 'Jugador eliminado correctamente'
         ]);
 
+    }
+
+    public function getAllTeamsPlayer()
+    {
+        return Player::whereHas('teams')->with('teams')->get();
     }
 }

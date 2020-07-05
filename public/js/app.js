@@ -2110,6 +2110,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2145,7 +2163,15 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     getPlayers: function getPlayers() {
       var _this = this;
 
-      axios.get('/players').then(function (res) {
+      var filter = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+      var search = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+      var uri = "/players";
+
+      if (filter != null && search != null) {
+        uri = "".concat(uri, "?filter=").concat(filter, "&search=").concat(search);
+      }
+
+      axios.get(uri).then(function (res) {
         _this.players = res.data.data;
       });
     },
@@ -37891,60 +37917,137 @@ var render = function() {
       ),
       _vm._v(" "),
       _c("div", { staticClass: "col-8" }, [
-        _c("table", { staticClass: "table" }, [
-          _vm._m(0),
-          _vm._v(" "),
-          _c(
-            "tbody",
-            _vm._l(_vm.players, function(player) {
-              return _c("tr", { key: player.id, staticClass: "text-center" }, [
-                _c("td", [_vm._v(" " + _vm._s(player.name) + " ")]),
-                _vm._v(" "),
-                _c("td", [_vm._v(" " + _vm._s(player.position) + " ")]),
-                _vm._v(" "),
-                _c("td", [_vm._v(" " + _vm._s(player.goals) + " ")]),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-12 my-3" }, [
+            _c(
+              "form",
+              {
+                staticClass:
+                  "form-inline my-2 my-lg-0 d-flex justify-content-center",
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.getPlayers(
+                      _vm.$refs.filter.value,
+                      _vm.$refs.search.value
+                    )
+                  }
+                }
+              },
+              [
+                _c("label", { attrs: { for: "filter" } }, [
+                  _vm._v(" Buscar por  : ")
+                ]),
                 _vm._v(" "),
                 _c(
-                  "td",
-                  { staticClass: "d-flex flex-wrap justify-content-center" },
+                  "select",
+                  {
+                    ref: "filter",
+                    staticClass: "form-control mx-2",
+                    attrs: { name: "filter", id: "filter" }
+                  },
                   [
-                    _c("PlayerGoals", {
-                      attrs: { player: player },
-                      on: { reload_players: _vm.getPlayers }
-                    }),
+                    _c("option", { attrs: { value: "name" } }, [
+                      _vm._v(" Jugador ")
+                    ]),
                     _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-primary mx-3",
-                        on: {
-                          click: function($event) {
-                            return _vm.setDataPlayerForUpdateForm(player)
-                          }
-                        }
-                      },
-                      [_vm._v(" Editar")]
-                    ),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-secondary mx-3",
-                        on: {
-                          click: function($event) {
-                            return _vm.deletePlayer(player.id)
-                          }
-                        }
-                      },
-                      [_vm._v(" Eliminar ")]
-                    )
-                  ],
-                  1
+                    _c("option", { attrs: { value: "position" } }, [
+                      _vm._v("Posición")
+                    ])
+                  ]
+                ),
+                _vm._v(" "),
+                _c("input", {
+                  ref: "search",
+                  staticClass: "form-control mr-sm-2",
+                  attrs: {
+                    type: "search",
+                    name: "search",
+                    id: "search",
+                    placeholder: "nombre ...",
+                    "aria-label": "Search"
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-outline-primary my-2 my-sm-0",
+                    attrs: { type: "submit" }
+                  },
+                  [_vm._v("Buscar")]
                 )
-              ])
-            }),
-            0
-          )
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-12 text-center my-3" }, [
+            _c("h3", [_vm._v(" " + _vm._s(_vm.totalPlayers) + "  jugadores ")])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-12" }, [
+            _c("table", { staticClass: "table" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c(
+                "tbody",
+                _vm._l(_vm.players, function(player) {
+                  return _c(
+                    "tr",
+                    { key: player.id, staticClass: "text-center" },
+                    [
+                      _c("td", [_vm._v(" " + _vm._s(player.name) + " ")]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(" " + _vm._s(player.position) + " ")]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(" " + _vm._s(player.goals) + " ")]),
+                      _vm._v(" "),
+                      _c(
+                        "td",
+                        {
+                          staticClass: "d-flex flex-wrap justify-content-center"
+                        },
+                        [
+                          _c("PlayerGoals", {
+                            attrs: { player: player },
+                            on: { reload_players: _vm.getPlayers }
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-primary mx-3",
+                              on: {
+                                click: function($event) {
+                                  return _vm.setDataPlayerForUpdateForm(player)
+                                }
+                              }
+                            },
+                            [_vm._v(" Editar")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-secondary mx-3",
+                              on: {
+                                click: function($event) {
+                                  return _vm.deletePlayer(player.id)
+                                }
+                              }
+                            },
+                            [_vm._v(" Eliminar ")]
+                          )
+                        ],
+                        1
+                      )
+                    ]
+                  )
+                }),
+                0
+              )
+            ])
+          ])
         ])
       ]),
       _vm._v(" "),
