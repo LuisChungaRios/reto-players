@@ -4,7 +4,7 @@ Generalmente los tokens se deben guardar en las variables de entorno, ya que son
 
 ### Especificaciones del proyecto
 #### Feature tests
-El proyecto tiene una suit de feature test para validar las funcionalidades del Player Model.
+El proyecto tiene una suit de feature test para validar las funcionalidades del Player.
 
 #### Relaciones
 Se ha generado una relación de many to many ficticio (Player, Team, PlayerTeam Models).
